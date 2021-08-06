@@ -20,7 +20,11 @@ export default {
   data () {
     return {
       board: undefined,
-      turn: 'black'
+      turn: 'black',
+      scores: {
+        'black': 0,
+        'white': 0
+      }
     }
   },
   created () {
@@ -31,8 +35,23 @@ export default {
       this.turn == 'black' ? this.turn = 'white' : this.turn = 'black';
     },
     clickedCell(rowIndex, sqIndex) {
-      this.turn == 'black' ? this.board[rowIndex][sqIndex] = 0 : this.board[rowIndex][sqIndex] = 1;
-      this.changeTurn();
+      if (this.board[rowIndex][sqIndex] === 'x') {
+        this.turn == 'black' ? this.board[rowIndex][sqIndex] = 0 : this.board[rowIndex][sqIndex] = 1;
+        this.updateScores();
+        this.changeTurn();
+      }
+    },
+    updateScores() {
+      let flattened = this.board.flat();
+      let blackScore = 0;
+      let whiteScore = 0;
+      for (var cell of flattened) {
+        if (cell !== 'x') {
+          cell === 0 ? blackScore++ : whiteScore++;
+        }
+      }
+      this.scores.black = blackScore;
+      this.scores.white = whiteScore;
     },
     makeBoardOfSize(rows, cols) {
       let board = Array(rows).fill().map(() => Array(cols).fill('x'));
