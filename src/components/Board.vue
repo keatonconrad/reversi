@@ -5,7 +5,7 @@
       <table>
         <tr v-for="(row, rowIndex) in board" :key="rowIndex">
           <td v-for="(square, sqIndex) in row" :key="sqIndex" @click="clickedCell(rowIndex, sqIndex)">
-            {{ square }}
+            <div class="circle" :class="{ black: square === 0, white: square === 1, hide: square === 'x'}"></div>
           </td>
         </tr>
       </table>
@@ -80,10 +80,33 @@ export default {
 h1, h2 {
   font-weight: normal;
 }
-
+p {
+  margin-top: 3em;
+}
 table {
   margin: 0 auto;
-  width: 20%;
   font-weight: bold;
+  background-color: #ccc;
+}
+td {
+  border: 1px solid white;
+  width: 2em;
+  height: 2em;
+  padding: 0.5em;
+}
+table td .circle {
+  width: 2em;
+  height: 2em;
+  border-radius: 2em;
+  background-color: #ccc;
+}
+.circle.black {
+  background-color: black;
+}
+.circle.white {
+  background-color: white;
+}
+.circle.hide {
+  display: none;
 }
 </style>
