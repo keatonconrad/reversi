@@ -32,7 +32,7 @@ export default {
     }
   },
   created () {
-    this.board = this.makeBoardOfSize(4, 4);
+    this.board = this.makeBoardOfSize(8, 8);
     this.totalCells = this.board.length * this.board[0].length;
   },
   computed: {
