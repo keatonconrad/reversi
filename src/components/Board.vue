@@ -4,8 +4,8 @@
     <div id="main-board">
       <table>
         <tr v-for="(row, rowIndex) in board" :key="rowIndex">
-          <td v-for="(square, sqIndex) in row" :key="sqIndex" @click="clickedCell(rowIndex, sqIndex)">
-            <div class="circle" :class="{ black: square === 0, white: square === 1, hide: square === 'x'}"></div>
+          <td v-for="(cell, cellIndex) in row" :key="cellIndex" @click="clickedCell(rowIndex, cellIndex)">
+            <div class="circle" :class="{ black: cell === 0, white: cell === 1, hide: cell === null}"></div>
           </td>
         </tr>
       </table>
@@ -44,9 +44,9 @@ export default {
     changeTurn() {
       this.turn == 'black' ? this.turn = 'white' : this.turn = 'black';
     },
-    clickedCell(rowIndex, sqIndex) {
-      if (this.board[rowIndex][sqIndex] === 'x') {
-        this.turn == 'black' ? this.board[rowIndex][sqIndex] = 0 : this.board[rowIndex][sqIndex] = 1;
+    clickedCell(rowIndex, cellIndex) {
+      if (this.board[rowIndex][cellIndex] === null) {
+        this.turn == 'black' ? this.board[rowIndex][cellIndex] = 0 : this.board[rowIndex][cellIndex] = 1;
         this.turnCount++;
         this.updateScores();
         if (this.turnCount >= this.totalCells) {
@@ -61,7 +61,7 @@ export default {
       let blackScore = 0;
       let whiteScore = 0;
       for (var cell of flattened) {
-        if (cell !== 'x') {
+        if (cell !== null) {
           cell === 0 ? blackScore++ : whiteScore++;
         }
       }
@@ -69,7 +69,7 @@ export default {
       this.scores.white = whiteScore;
     },
     makeBoardOfSize(rows, cols) {
-      let board = Array(rows).fill().map(() => Array(cols).fill('x'));
+      let board = Array(rows).fill().map(() => Array(cols).fill(null));
       return board;
     }
   }
