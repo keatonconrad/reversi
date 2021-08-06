@@ -27,10 +27,20 @@ describe('Board.vue', () => {
   it('should return correct scores', () => {
     const wrapper = mount(Board);
     const cells = wrapper.findAll('td');
-    for (var i = 0; i <= 4; i++) {
+    for (var i = 0; i < 5; i++) {
       cells.at(i).trigger('click');
     }
     expect(wrapper.vm.$data.scores.black).toEqual(3);
     expect(wrapper.vm.$data.scores.white).toEqual(2);
+  })
+
+  it('should end game when all spaces are full', () => {
+    const wrapper = mount(Board);
+    const cells = wrapper.findAll('td');
+    for (var i = 0; i < cells.length; i++) {
+      cells.at(i).trigger('click');
+    }
+    expect(wrapper.vm.$data.totalCells).toEqual(64);
+    expect(wrapper.vm.$data.gameOver).toEqual(true);
   })
 })

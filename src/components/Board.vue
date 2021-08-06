@@ -11,6 +11,7 @@
       </table>
     </div>
     <p>It's {{ turn }}'s turn.</p>
+    <p v-if="gameOver">Game over! The winner is <strong>{{ currentWinner }}</strong>!</p>
   </div>
 </template>
 
@@ -24,11 +25,20 @@ export default {
       scores: {
         'black': 0,
         'white': 0
-      }
+      },
+      turnCount: 0,
+      gameOver: false,
+      totalCells: undefined
     }
   },
   created () {
-    this.board = this.makeBoardOfSize(8, 8);
+    this.board = this.makeBoardOfSize(4, 4);
+    this.totalCells = this.board.length * this.board[0].length;
+  },
+  computed: {
+    currentWinner() {
+      return Object.keys(this.scores).reduce((a, b) => this.scores[a] > this.scores[b] ? a : b);
+    },
   },
   methods: {
     changeTurn() {
@@ -37,7 +47,12 @@ export default {
     clickedCell(rowIndex, sqIndex) {
       if (this.board[rowIndex][sqIndex] === 'x') {
         this.turn == 'black' ? this.board[rowIndex][sqIndex] = 0 : this.board[rowIndex][sqIndex] = 1;
+        this.turnCount++;
         this.updateScores();
+        if (this.turnCount >= this.totalCells) {
+          this.gameOver = true;
+          return;
+        }
         this.changeTurn();
       }
     },
