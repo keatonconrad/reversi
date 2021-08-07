@@ -33,27 +33,27 @@ export default {
       turnCount: 0,
       gameOver: false,
       totalCells: undefined
-    }
+    };
   },
   created () {
     this.board = this.makeBoardOfSize(this.size, this.size);
     this.totalCells = this.board.length * this.board[0].length;
   },
   computed: {
-    currentWinner() {
+    currentWinner () {
       return Object.keys(this.scores).reduce((a, b) => this.scores[a] > this.scores[b] ? a : b);
-    },
+    }
   },
   methods: {
-    reload() {
+    reload () {
       window.location.reload();
     },
-    changeTurn() {
-      this.turn == 'black' ? this.turn = 'white' : this.turn = 'black';
+    changeTurn () {
+      this.turn === 'black' ? this.turn = 'white' : this.turn = 'black';
     },
-    clickedCell(rowIndex, cellIndex) {
+    clickedCell (rowIndex, cellIndex) {
       if (this.board[rowIndex][cellIndex] === null) {
-        this.turn == 'black' ? this.board[rowIndex][cellIndex] = 0 : this.board[rowIndex][cellIndex] = 1;
+        this.turn === 'black' ? this.board[rowIndex][cellIndex] = 0 : this.board[rowIndex][cellIndex] = 1;
         this.getAffectedCells(rowIndex, cellIndex);
         this.turnCount++;
         this.updateScores();
@@ -65,7 +65,7 @@ export default {
         this.changeTurn();
       }
     },
-    updateScores() {
+    updateScores () {
       let flattened = this.board.flat();
       let blackScore = 0;
       let whiteScore = 0;
@@ -77,20 +77,22 @@ export default {
       this.scores.black = blackScore;
       this.scores.white = whiteScore;
     },
-    makeBoardOfSize(rows, cols) {
+    makeBoardOfSize (rows, cols) {
       let board = Array(rows).fill().map(() => Array(cols).fill(null));
       return board;
     },
-    setCellState(rowIndex, cellIndex, value) {
+    setCellState (rowIndex, cellIndex, value) {
       this.board[rowIndex][cellIndex] = value;
     },
-    getAffectedCells(rowIndex, cellIndex) {
+    getAffectedCells (rowIndex, cellIndex) {
       let affectedCells = [];
       let turnInt;
-      this.turn == 'black' ? turnInt = 0 : turnInt = 1;
+      this.turn === 'black' ? turnInt = 0 : turnInt = 1;
+
+      let i;
 
       // Right
-      for (var i = cellIndex; i < this.board.length; i++) {
+      for (i = cellIndex; i < this.board.length; i++) {
         let cell = this.board[rowIndex][i];
         if (i === cellIndex) continue;
         if (cell === null || (cell !== turnInt && i === this.board.length - 1)) {
@@ -107,7 +109,7 @@ export default {
       affectedCells = [];
 
       // Left
-      for (var i = cellIndex; i >= 0; i--) {
+      for (i = cellIndex; i >= 0; i--) {
         let cell = this.board[rowIndex][i];
         if (i === cellIndex) continue;
         if (cell === null || (cell !== turnInt && i === 0)) {
@@ -124,7 +126,7 @@ export default {
       affectedCells = [];
 
       // Up
-      for (var i = rowIndex; i >= 0; i--) {
+      for (i = rowIndex; i >= 0; i--) {
         let cell = this.board[i][cellIndex];
         if (i === rowIndex) continue;
         if (cell === null || (cell !== turnInt && i === 0)) {
@@ -141,7 +143,7 @@ export default {
       affectedCells = [];
 
       // Down
-      for (var i = rowIndex; i < this.board.length; i++) {
+      for (i = rowIndex; i < this.board.length; i++) {
         let cell = this.board[i][cellIndex];
         if (i === rowIndex) continue;
         if (cell === null || (cell !== turnInt && i === this.board.length - 1)) {
@@ -157,12 +159,10 @@ export default {
       }
       affectedCells = [];
 
-
-
       /*
       // Down & right
       let j = cellIndex;
-      for (var i = rowIndex; i < this.board.length; i++) {
+      for (i = rowIndex; i < this.board.length; i++) {
         if (i >= this.board.length || j >= this.board.length) break;
         console.log(i + ', ' + j + ' - ' + rowIndex + ', ' + cellIndex);
         let cell = this.board[i][j];
@@ -186,7 +186,7 @@ export default {
       */
     }
   }
-}
+};
 </script>
 
 <style scoped>
