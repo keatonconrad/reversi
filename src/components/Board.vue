@@ -52,6 +52,7 @@ export default {
         this.updateScores();
         if (this.turnCount >= this.totalCells) {
           this.gameOver = true;
+          this.$emit('confetti');
           return;
         }
         this.changeTurn();
