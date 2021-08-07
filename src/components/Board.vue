@@ -156,12 +156,52 @@ export default {
         this.setCellState(coords[0], coords[1], turnInt);
       }
       affectedCells = [];
+
+
+
+      /*
+      // Down & right
+      let j = cellIndex;
+      for (var i = rowIndex; i < this.board.length; i++) {
+        if (i >= this.board.length || j >= this.board.length) break;
+        console.log(i + ', ' + j + ' - ' + rowIndex + ', ' + cellIndex);
+        let cell = this.board[i][j];
+        if (i === rowIndex && j === cellIndex) {
+          j++;
+          continue;
+        };
+        if (cell === null || (cell !== turnInt && i === this.board.length - 1 && j === this.board.length - 1)) {
+          affectedCells = [];
+          break;
+        } else if (cell === turnInt) {
+          break;
+        }
+        if (cell !== turnInt) affectedCells.push([i, j]);
+        j++;
+      }
+      for (let coords of affectedCells) {
+        this.setCellState(coords[0], coords[1], turnInt);
+      }
+      affectedCells = [];
+      */
     }
   }
 }
 </script>
 
 <style scoped>
+#header {
+  display: flex;
+  width: 30%;
+  height: 2em;
+  margin: 2em auto;
+  line-height: 2em;
+}
+#header button, #header p {
+  width: 50%;
+  margin: 0;
+
+}
 h1, h2 {
   font-weight: normal;
 }
