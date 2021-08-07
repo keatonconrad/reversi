@@ -1,7 +1,13 @@
 <template>
   <div id="app">
     <canvas id="confetti"></canvas>
-    <Board @confetti="renderConfetti" />
+    <h1>Welcome to Reversi</h1>
+    <div v-if="!playing">
+      <p>Enter your board size</p>
+      <input type="number" id="dim-select" v-model.number="dimensions" />
+      <button id="play-btn" @click="play">Play</button>
+    </div>
+    <Board v-else :size="dimensions" @confetti="renderConfetti" />
   </div>
 </template>
 
@@ -11,6 +17,12 @@ import ConfettiGenerator from 'confetti-js';
 
 export default {
   name: 'App',
+  data() {
+    return {
+      dimensions: undefined,
+      playing: false
+    }
+  },
   components: {
     Board
   },
@@ -29,6 +41,13 @@ export default {
       };
       var confetti = new ConfettiGenerator(confettiSettings);
       confetti.render();
+    },
+    play() {
+      if (this.dimensions < 3) {
+        window.alert('Board size must be greater than 3')
+      } else {
+        this.playing = true;
+      }
     }
   }
 }
@@ -49,5 +68,13 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
+  z-index: -1;
+}
+
+#play-btn, input {
+  padding: 0.5em 0.7em;
+}
+input {
+  width: 10%;
 }
 </style>

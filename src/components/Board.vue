@@ -1,6 +1,9 @@
 <template>
   <div id="board">
-    <h1>Welcome to Reversi</h1>
+    <div id="header">
+      <button id="play-again-btn" @click="reload">Play Again</button>
+      <p>Turn: {{ turnCount }}</p>
+    </div>
     <div id="main-board">
       <table>
         <tr v-for="(row, rowIndex) in board" :key="rowIndex">
@@ -18,6 +21,7 @@
 <script>
 export default {
   name: 'Board',
+  props: ['size'],
   data () {
     return {
       board: undefined,
@@ -32,7 +36,7 @@ export default {
     }
   },
   created () {
-    this.board = this.makeBoardOfSize(5, 5);
+    this.board = this.makeBoardOfSize(this.size, this.size);
     this.totalCells = this.board.length * this.board[0].length;
   },
   computed: {
@@ -41,6 +45,9 @@ export default {
     },
   },
   methods: {
+    reload() {
+      window.location.reload();
+    },
     changeTurn() {
       this.turn == 'black' ? this.turn = 'white' : this.turn = 'black';
     },
