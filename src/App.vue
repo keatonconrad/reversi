@@ -63,14 +63,12 @@ export default {
   margin: 0;
   padding: 0;
 }
-
 #confetti {
   position: fixed;
   top: 0;
   left: 0;
   z-index: -1;
 }
-
 #play-btn, input {
   padding: 0.5em 0.7em;
 }

@@ -81,17 +81,21 @@ export default {
       let board = Array(rows).fill().map(() => Array(cols).fill(null));
       return board;
     },
-    setCellState (rowIndex, cellIndex, value) {
-      this.board[rowIndex][cellIndex] = value;
-    },
     getAffectedCells (rowIndex, cellIndex) {
-      let affectedCells = [];
-      let turnInt;
+      let allAffectedCells = [];
+      let turnInt, i;
       this.turn === 'black' ? turnInt = 0 : turnInt = 1;
 
-      let i;
-
       // Right
+      /*
+      This code block searches for the opposite color to the right, starting at
+      the circle that was just placed. It keeps moving to the right until it
+      finds the current player's color. If it finds an unplayed cell or reaches
+      the edge of the board, before it finds the current player's color, it
+      exits and no cells are affected. Otherwise, it will add the affected cells
+      to an array to later change their color to the current player's.
+      */
+      let affectedCells = [];
       for (i = cellIndex; i < this.board.length; i++) {
         let cell = this.board[rowIndex][i];
         if (i === cellIndex) continue;
@@ -103,12 +107,10 @@ export default {
         }
         if (cell !== turnInt) affectedCells.push([rowIndex, i]);
       }
-      for (let coords of affectedCells) {
-        this.setCellState(coords[0], coords[1], turnInt);
-      }
-      affectedCells = [];
+      allAffectedCells = allAffectedCells.concat(affectedCells);
 
       // Left
+      affectedCells = [];
       for (i = cellIndex; i >= 0; i--) {
         let cell = this.board[rowIndex][i];
         if (i === cellIndex) continue;
@@ -120,12 +122,10 @@ export default {
         }
         if (cell !== turnInt) affectedCells.push([rowIndex, i]);
       }
-      for (let coords of affectedCells) {
-        this.setCellState(coords[0], coords[1], turnInt);
-      }
-      affectedCells = [];
+      allAffectedCells = allAffectedCells.concat(affectedCells);
 
       // Up
+      affectedCells = [];
       for (i = rowIndex; i >= 0; i--) {
         let cell = this.board[i][cellIndex];
         if (i === rowIndex) continue;
@@ -137,12 +137,10 @@ export default {
         }
         if (cell !== turnInt) affectedCells.push([i, cellIndex]);
       }
-      for (let coords of affectedCells) {
-        this.setCellState(coords[0], coords[1], turnInt);
-      }
-      affectedCells = [];
+      allAffectedCells = allAffectedCells.concat(affectedCells);
 
       // Down
+      affectedCells = [];
       for (i = rowIndex; i < this.board.length; i++) {
         let cell = this.board[i][cellIndex];
         if (i === rowIndex) continue;
@@ -154,13 +152,16 @@ export default {
         }
         if (cell !== turnInt) affectedCells.push([i, cellIndex]);
       }
-      for (let coords of affectedCells) {
-        this.setCellState(coords[0], coords[1], turnInt);
+      allAffectedCells = allAffectedCells.concat(affectedCells);
+
+      for (let coords of allAffectedCells) {
+        // Sets the cell at that coordinate pair to the current player's color
+        this.board[coords[0]][coords[1]] = turnInt;
       }
-      affectedCells = [];
 
       /*
       // Down & right
+      affectedCells = [];
       let j = cellIndex;
       for (i = rowIndex; i < this.board.length; i++) {
         if (i >= this.board.length || j >= this.board.length) break;
@@ -179,10 +180,7 @@ export default {
         if (cell !== turnInt) affectedCells.push([i, j]);
         j++;
       }
-      for (let coords of affectedCells) {
-        this.setCellState(coords[0], coords[1], turnInt);
-      }
-      affectedCells = [];
+      allAffectedCells = allAffectedCells.concat(affectedCells);
       */
     }
   }

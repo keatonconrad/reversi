@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils';
 import App from '@/App.vue';
 
-describe('Board.vue', () => {
+describe('App.vue', () => {
   let wrapper;
 
   beforeEach(() => {
