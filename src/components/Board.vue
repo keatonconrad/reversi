@@ -32,7 +32,7 @@ export default {
     }
   },
   created () {
-    this.board = this.makeBoardOfSize(8, 8);
+    this.board = this.makeBoardOfSize(5, 5);
     this.totalCells = this.board.length * this.board[0].length;
   },
   computed: {
@@ -47,6 +47,7 @@ export default {
     clickedCell(rowIndex, cellIndex) {
       if (this.board[rowIndex][cellIndex] === null) {
         this.turn == 'black' ? this.board[rowIndex][cellIndex] = 0 : this.board[rowIndex][cellIndex] = 1;
+        this.getAffectedCells(rowIndex, cellIndex);
         this.turnCount++;
         this.updateScores();
         if (this.turnCount >= this.totalCells) {
@@ -71,6 +72,82 @@ export default {
     makeBoardOfSize(rows, cols) {
       let board = Array(rows).fill().map(() => Array(cols).fill(null));
       return board;
+    },
+    setCellState(rowIndex, cellIndex, value) {
+      this.board[rowIndex][cellIndex] = value;
+    },
+    getAffectedCells(rowIndex, cellIndex) {
+      let affectedCells = [];
+      let turnInt;
+      this.turn == 'black' ? turnInt = 0 : turnInt = 1;
+
+      // Right
+      for (var i = cellIndex; i < this.board.length; i++) {
+        let cell = this.board[rowIndex][i];
+        if (i === cellIndex) continue;
+        if (cell === null || (cell !== turnInt && i === this.board.length - 1)) {
+          affectedCells = [];
+          break;
+        } else if (cell === turnInt) {
+          break;
+        }
+        if (cell !== turnInt) affectedCells.push([rowIndex, i]);
+      }
+      for (let coords of affectedCells) {
+        this.setCellState(coords[0], coords[1], turnInt);
+      }
+      affectedCells = [];
+
+      // Left
+      for (var i = cellIndex; i >= 0; i--) {
+        let cell = this.board[rowIndex][i];
+        if (i === cellIndex) continue;
+        if (cell === null || (cell !== turnInt && i === 0)) {
+          affectedCells = [];
+          break;
+        } else if (cell === turnInt) {
+          break;
+        }
+        if (cell !== turnInt) affectedCells.push([rowIndex, i]);
+      }
+      for (let coords of affectedCells) {
+        this.setCellState(coords[0], coords[1], turnInt);
+      }
+      affectedCells = [];
+
+      // Up
+      for (var i = rowIndex; i >= 0; i--) {
+        let cell = this.board[i][cellIndex];
+        if (i === rowIndex) continue;
+        if (cell === null || (cell !== turnInt && i === 0)) {
+          affectedCells = [];
+          break;
+        } else if (cell === turnInt) {
+          break;
+        }
+        if (cell !== turnInt) affectedCells.push([i, cellIndex]);
+      }
+      for (let coords of affectedCells) {
+        this.setCellState(coords[0], coords[1], turnInt);
+      }
+      affectedCells = [];
+
+      // Down
+      for (var i = rowIndex; i < this.board.length; i++) {
+        let cell = this.board[i][cellIndex];
+        if (i === rowIndex) continue;
+        if (cell === null || (cell !== turnInt && i === this.board.length - 1)) {
+          affectedCells = [];
+          break;
+        } else if (cell === turnInt) {
+          break;
+        }
+        if (cell !== turnInt) affectedCells.push([i, cellIndex]);
+      }
+      for (let coords of affectedCells) {
+        this.setCellState(coords[0], coords[1], turnInt);
+      }
+      affectedCells = [];
     }
   }
 }
